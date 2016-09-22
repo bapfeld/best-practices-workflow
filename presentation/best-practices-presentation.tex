@@ -1,0 +1,245 @@
+\documentclass[bigger, aspectratio=169]{beamer}
+% In order to compile this document, you'll have to have the
+% metropolis theme on your computer, as well as the adobe source code
+% pro font. 
+\beamerdefaultoverlayspecification{<+->}
+\usetheme[titleformat=smallcaps, progressbar=frametitle]{metropolis}
+\setmonofont{Source Code Pro}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+
+\title{Best Practices. For Science}
+\author{J. Alexander Branham}
+
+\begin{document}
+{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{for-science.jpg}}
+  \begin{frame}
+    \vspace{-2.5in} \hspace{2.75in} \Huge{\color{white} Best Practices.} 
+  \end{frame}
+}
+
+\begin{frame}
+  \frametitle{The Goal}
+  \pause{}
+  \centering
+  \Huge{Get published}\\
+  \pause{} \vspace{1in}
+  \small{And do (good) science}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Why care?}
+  Why care about all this reproducibility/best practices stuff? 
+  \pause{}
+  \begin{itemize}
+  \item Journals require it
+  \item It makes your life easier
+  \item And for science 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{What will it do for me?}
+  \pause{}
+  \begin{itemize}
+  \item Reduce errors
+  \item Speed up re-running analyses
+  \item Allow ourselves/others to reproduce our work in the future
+  \item \url{https://youtu.be/s3JldKoA0zw?t=4s}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Papers}
+  A paper has at least some of:
+  \begin{itemize}
+  \item writing
+  \item data \& summaries (tables, figures, statistics)
+  \item citations (ugggghhh) \& cross-references
+  \item appendix
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{An ideal system}
+  \begin{itemize}
+  \item I want a system that \emph{keeps a record of my actions} as I:\@
+    \begin{itemize}
+    \item write \& cite
+    \item analyze data
+    \item present results
+    \end{itemize}
+  \item Reproducibly 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  In picking tools, some desirable qualities:
+  \begin{itemize}
+  \item Free (because we're poor grad students)
+  \item Open source (so they'll be around later) 
+    \begin{itemize}
+    \item Quick moment of silence for Google Reader
+    \end{itemize}
+  \item Operate on \emph{plain text} (so they're usable in the future)
+    \begin{itemize}
+    \item Ever try to open a doc file from 10 years ago?
+    \end{itemize}
+  \item Work on most operating systems
+  \item Don't hurt to learn
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Write \& cite}
+  \begin{itemize}
+  \item When writing Latex, you write in a plain-text file with a specific markup 
+  \item It makes citations/bibliographies easy
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Latex example}
+\begin{verbatim}
+\section{Introduction}
+
+This is a sentence! With \emph{emphasis}. 
+And a citation \autocite{wlezien1995}. 
+
+This is a new paragraph because there's a blank line. 
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Bib example}
+\begin{verbatim}
+@article{wlezien1995,
+  author = {Wlezien, Christopher},
+  title = {The Public As Thermostat: Dynamics of 
+             Preferences for Spending},
+  journal = {American Journal of Political Science},
+  volume = 39,
+  pages = {981--1000},
+  year = 1995,
+  doi = {10.2307/2111666},
+  url = {http://dx.doi.org/10.2307/2111666},
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Analyze data}
+  \begin{itemize}
+  \item R is free, open-source, and has the largest repository of statistical packages
+  \item Python is also free and open source but has fewer users (in academic circles)
+  \item Stata is probably the main competitor to R (in our discipline), but isn't free or open-source
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Analyze data}
+  \begin{itemize}
+  \item Comment your code liberally
+  \item If you write a function, test that it does what you think it does:
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{R example}
+\begin{verbatim}
+x <- rnorm(100) 
+y <- rnorm(100, mean = 3 * x) # 100 draws from Y ~ N(3x, 1)
+lm(y ~ x) # expect beta = 3ish
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Test functions}
+  \begin{verbatim}
+timestwo <- function(x) {
+  # take vector x and multiply each element by 2
+  x + 2 
+}
+timestwo(-2:2) == c(-4, -2, 0, 2, 4)
+\end{verbatim}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reproduce}
+  \begin{itemize}
+  \item You write your paper, make your tables/figures, and ship it off to a journal.
+  \item Eight months later, a reviewer wants you to tweak Figure 1.
+  \item How did you make it in the first place? 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Reproduce}
+  \begin{itemize}
+  \item One solution: \texttt{knitr}
+  \item Allows you to use Latex and R in the same document
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Rnw example}
+\begin{verbatim}
+\section{Introduction}
+
+This is a sentence! With \emph{emphasis}. 
+And a citation \autocite{wlezien1995}. 
+
+<<R>>=
+x <- rnorm(100) 
+y <- rnorm(100, mean = 3 * x) # 100 draws from Y ~ N(3x, 1)
+lm(y ~ x) # expect beta = 3ish
+@
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[standout]
+  Keep a record \\
+  of \emph{everything} you do\\
+\end{frame}
+
+\begin{frame}[standout]
+  \Huge{Keep a record} \\
+  \Huge{of \emph{everything} you do}\\
+\end{frame}
+
+\begin{frame}
+    \centering
+    \includegraphics[width=0.5\textwidth]{final.jpg}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Git}
+  \begin{itemize}
+  \item Git keeps track of the whole project (data, writing, code) all in one place
+  \item It allows you to comment on what's being changed in each \emph{commit}
+  \item You can change things with no fear of losing anything
+  \item Like ``track changes'' and backups on steroids
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Other tools}
+  \begin{itemize}
+  \item \texttt{make} --- for describing dependencies between files (especially useful for analyses that take longer to run)
+  \item \texttt{pandoc} --- for when you need a docx version of your paper
+  \end{itemize}
+\end{frame}
+
+{
+  \usebackgroundtemplate{\includegraphics[width=\paperwidth]{aperture}}
+  \begin{frame}
+    And now for \\
+    a live example\ldots
+  \end{frame}
+}
+
+\end{document}
