@@ -10,11 +10,11 @@ odt: output/awesome-paper.odt
 presentation: presentation/best-practices-presentation.pdf
 
 presentation/best-practices-presentation.pdf: presentation/best-practices-presentation.tex
-	cd presentation; latexmk -synctex=1 -shell-escape -xelatex -pdf best-practices-presentation
+	cd presentation; latexmk -synctex=1 -shell-escape -xelatex -pdf -output-directory=../output best-practices-presentation
 
 # make the pdf 
 output/awesome-paper.pdf: output/awesome-paper.tex
-	latexmk -synctex=1 -shell-escape -pdf output/awesome-paper
+	latexmk -synctex=1 -shell-escape -pdf -output-directory=output output/awesome-paper
 
 # make the odt (can then save to docx if really need it)
 # can also make docx directly by changing odt to docx in following lines
