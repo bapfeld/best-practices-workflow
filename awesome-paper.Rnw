@@ -3,7 +3,7 @@
 \usepackage{setspace} % for double spacing 
 \usepackage{graphicx} % makes graphics easier
 \usepackage[style=authoryear, sorting=ydnt, url=false, doi=false]{biblatex} % package we use for citations
-\addbibresource{~/Dropbox/bibliography/references.bib} %location of our bib file
+\addbibresource{bibliography/references.bib} %location of our bib file
 \title{My Awesome Paper}
 \author{J. Alexander Branham}
 

@@ -1,4 +1,4 @@
-BIB = $(HOME)/Dropbox/bibliography/references.bib
+BIB = bibliography/references.bib
 
 all: pdf odt presentation
 
