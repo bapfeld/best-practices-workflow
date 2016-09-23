@@ -1,0 +1,84 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry} % to control margins
+\usepackage{setspace} % for double spacing 
+\usepackage{graphicx} % makes graphics easier
+\usepackage[style=authoryear, sorting=ydnt, url=false, doi=false]{biblatex} % package we use for citations
+\addbibresource{~/Dropbox/bibliography/references.bib} %location of our bib file
+\title{My Awesome Paper}
+\author{J. Alexander Branham}
+
+\usepackage[pdfusetitle]{hyperref} % needs to be loaded last, pdfusetitle sets the metadata the resulting pdf using title/author info here
+\hypersetup{colorlinks=true,allcolors=red} % color links instead of putting them in hideous boxes
+\begin{document}
+\maketitle{}
+
+\begin{abstract}
+  People like beer. Let's see what kinds of beer they like the most. 
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+\doublespacing{}
+
+In this super awesome paper, I look at people's beer preferences. The data are from \href{http://www.craftbeeranalytics.com/uploads/3/3/8/9/3389428/ratebeer_beerjobber.txt}{here}. Using the file \texttt{code/beer-data.R}, I download the file and clean up the data a bit, all with R \autocite{team2016}. To make sure that everything goes well, I compile the pdf or odt files using \texttt{make}. You may specify that you want just the pdf (for example) by running \texttt{make pdf} from the command line. Clean up everything that has been generated (except the data) by running \texttt{make clean}.
+
+% Our first R chunk. I usually use the first one to load packages (which I like to keep in another file), setup knitr options, load data, etc
+
+<<R setup-and-import, echo = FALSE, results = 'hide', message = FALSE, warning = FALSE>>=
+## Load the packages we want
+source("code/packages.R")
+
+## Set up knitr options
+opts_chunk$set(echo = FALSE, # don't output code
+               results = 'hide', # don't output results from code
+               warning = FALSE, # don't put warnings in the document
+               message = FALSE # don't put messages in the document
+               )
+
+## Set up ggplot theme:
+theme_set(theme_minimal())
+
+## Load data made by code/beer-data.R file:
+beer_data <- import("data/beer-data.csv")
+@
+
+I first made sure some packages were installed by running the code in \texttt{code/packages.R}, then set knitr's ``chunk options'' so that I wouldn't have to keep repeating myself. I rarely want the code or results from a chunk in the output (pdf file), so if I do it's easier to manually set that one chunk.
+
+Finally, I imported the data, which had been downloaded and cleaned a bit in \texttt{code/beer-data.R}. Let's make a plot where we plot alcohol by volumne on the x-axis and average scores on the y-axis. We can also report the simple bivariate relationship between the two in the caption. We can refer to it this way: \autoref{fig:abv-scores}. In fact, we can refer to pretty much anything that way. Here's a section: \autoref{sec:introduction}. 
+
+% Here's our first R chunk. It uses the properties set above, so no need to echo = FALSE here!
+
+<<R beer-plot>>=
+reg <- lm(score_overall ~ abv, data = filter(beer_data, abv != 0))
+abv_coef <- coef(reg)["abv"]
+
+abv_score_fig <- beer_data %>%
+  filter(abv != 0) %>%
+  ggplot(aes(abv, score_overall)) +
+  geom_point()
+
+ggsave("output/abv-score.eps", plot = abv_score_fig,
+       height = 4, width = 6)
+@ 
+
+\begin{figure}
+  \centering
+  \includegraphics{output/abv-score.eps}
+  \caption{People's evaluations of beer go up \Sexpr{round(abv_coef, 1)} points for every one percentage point increase in ABV, on average} %the Sexpr part lets us evaluate R code inline
+  \label{fig:abv-scores}
+\end{figure}
+
+<<R beer-table, results='asis'>>=
+beer_data %>%
+  filter(abv != 0, ratings > 50) %>%
+  group_by(style) %>%
+  summarize_if(is.numeric, mean, na.rm = TRUE) %>%
+  arrange(desc(score_overall)) %>%
+  head(10) %>%
+  select(-ratings) %>%
+  xtable(digits = 1, caption = "What beer do people like? mean rating score and abv by style")
+@ 
+
+
+\printbibliography[heading=bibnumbered]{}
+\end{document}
