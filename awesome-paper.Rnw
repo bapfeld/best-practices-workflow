@@ -57,6 +57,7 @@ abv_score_fig <- beer_data %>%
   ggplot(aes(abv, score_overall)) +
   geom_point()
 
+# use eps instead of pdf so that they can be included in a word file
 ggsave("output/abv-score.eps", plot = abv_score_fig,
        height = 4, width = 6)
 @ 
@@ -64,7 +65,7 @@ ggsave("output/abv-score.eps", plot = abv_score_fig,
 \begin{figure}
   \centering
   \includegraphics{output/abv-score.eps}
-  \caption{People's evaluations of beer go up \Sexpr{round(abv_coef, 1)} points for every one percentage point increase in ABV, on average} %the Sexpr part lets us evaluate R code inline
+  \caption{People's evaluations of beer go up \Sexpr{round(abv_coef, 1)} points for every one percentage point increase in ABV, on average} %the Sexpr part lets us evaluate R code inline - short for "S expression"
   \label{fig:abv-scores}
 \end{figure}
 
