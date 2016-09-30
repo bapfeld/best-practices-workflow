@@ -2,6 +2,8 @@ if(!dir.exists("../data/")){
   dir.create("../data/")
 }
 
+source("packages.R")
+
 beer_url <- "http://www.craftbeeranalytics.com/uploads/3/3/8/9/3389428/ratebeer_beerjobber.txt"
 
 beer_data <- rio::import(beer_url)
