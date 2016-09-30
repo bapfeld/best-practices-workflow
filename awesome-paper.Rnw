@@ -83,9 +83,9 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 beer_data %>%
   filter(abv != 0, ratings > 50) %>%
   group_by(style) %>%
-  summarize_if(is.numeric, mean, na.rm = TRUE) %>%
-  arrange(desc(score_overall)) %>%
-  head(10) %>%
+  summarize_if(is.numeric, mean, na.rm = TRUE) %>% # get avg scores
+  arrange(desc(score_overall)) %>% # arrange so that best overall scores on top
+  head(10) %>% # get top 10
   select(-ratings) %>%
   rename(Style = style,
          ABV = abv,
