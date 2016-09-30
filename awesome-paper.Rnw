@@ -55,7 +55,9 @@ abv_coef <- coef(reg)["abv"]
 abv_score_fig <- beer_data %>%
   filter(abv != 0) %>%
   ggplot(aes(abv, score_overall)) +
-  geom_point()
+  geom_point() +
+  labs(x = "Alcohol by volumn",
+       y = "Overall score")
 
 # use eps instead of pdf so that they can be included in a word file
 ggsave("output/abv-score.eps", plot = abv_score_fig,
